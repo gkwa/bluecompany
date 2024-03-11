@@ -11,10 +11,16 @@ class CustomLink(SpanToken):
     pattern = re.compile(
         r"""
         \[\[
-        (?P<target>.+?)
+        (?P<target>
+            (?P<page>[^#\|\]]+)
+            (?:
+                \#
+                (?P<section>[^\|\]]+)
+            )?
+        )
         (?:
             \|
-            (?P<text>.+?)
+            (?P<text>[^\]]+)
         )?
         \]\]
         """,
@@ -24,6 +30,8 @@ class CustomLink(SpanToken):
     def __init__(self, match):
         self.target = match.group("target").strip()
         self.text = match.group("text").strip() if match.group("text") else self.target
+        self.page = match.group("page").strip()
+        self.section = match.group("section").strip() if match.group("section") else ""
 
 
 class CustomLinkRenderer(HtmlRenderer):
@@ -36,23 +44,13 @@ class CustomLinkRenderer(HtmlRenderer):
         target = token.target
         text = token.text
 
-        # Extract the components from the target
-        match = re.match(
-            r"""
-            (?P<page>[^#]*)
-            (?:
-                \#
-                (?P<section>.*)
-            )?
-            """,
-            target,
-            re.VERBOSE,
-        )
-        page = match.group("page")
-        section = match.group("section") if match.group("section") else ""
-
         # Append the link to the list of dictionaries with separated components
-        link_dict = {"target": target, "text": text, "page": page, "section": section}
+        link_dict = {
+            "target": target,
+            "text": text,
+            "page": token.page,
+            "section": token.section,
+        }
         self.links.append(link_dict)
 
         return template.format(target=target, text=text)
