@@ -11,10 +11,10 @@ class CustomLink(SpanToken):
     pattern = re.compile(
         r"""
         \[\[
-        (.+?)
+        (?P<target>.+?)
         (?:
             \|
-            (.+?)
+            (?P<text>.+?)
         )?
         \]\]
         """,
@@ -22,8 +22,8 @@ class CustomLink(SpanToken):
     )
 
     def __init__(self, match):
-        self.target = match.group(1).strip()
-        self.text = match.group(2).strip() if match.group(2) else self.target
+        self.target = match.group("target").strip()
+        self.text = match.group("text").strip() if match.group("text") else self.target
 
 
 class CustomLinkRenderer(HtmlRenderer):
@@ -39,19 +39,17 @@ class CustomLinkRenderer(HtmlRenderer):
         # Extract the components from the target
         match = re.match(
             r"""
-            (
-                [^#]*
-            )
+            (?P<page>[^#]*)
             (?:
                 \#
-                (.*)
+                (?P<section>.*)
             )?
             """,
             target,
             re.VERBOSE,
         )
-        page = match.group(1)
-        section = match.group(2) if match.group(2) else ""
+        page = match.group("page")
+        section = match.group("section") if match.group("section") else ""
 
         # Append the link to the list of dictionaries with separated components
         link_dict = {"target": target, "text": text, "page": page, "section": section}
@@ -61,10 +59,8 @@ class CustomLinkRenderer(HtmlRenderer):
 
     def render(self, *args, **kwargs):
         rendered = super().render(*args, **kwargs)
-
         # Convert the list of links to JSON format
         links_json = json.dumps(self.links)
-
         return rendered
 
     def get_links_json(self):
