@@ -7,17 +7,11 @@ Learn how to use [[mistletoe]] to parse [[Obsidian]] markdown links with the int
 
 ## Usage
 
-
-
-
 ```bash
 # Show help:
 bluecompany 
 bluecompany --help
 
-# Get 10 random paths and fetch links from all into list of dicts
-rg --files --glob='*.md' ~/Documents/Obsidian\ Vault | sort -R | head -10 | bluecompany
-bluecompany "$(rg --files --glob='*.md' ~/Documents/Obsidian\ Vault | sort -R | head -10)"
+# recurse through my Obsidian vault for file paths that contain vegan and exclude pudding:
+bluecompany ~/Documents/Obsidian\ Vault --include=vegan --exclude=pudding --exclude=test
 ```
-
-
