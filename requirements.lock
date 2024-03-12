@@ -14,3 +14,7 @@ markupsafe==2.1.5
     # via jinja2
 mistletoe==1.3.0
     # via bluecompany
+platformdirs==4.2.0
+    # via bluecompany
+pyyaml==6.0.1
+    # via bluecompany

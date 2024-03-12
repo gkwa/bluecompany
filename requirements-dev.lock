@@ -25,3 +25,6 @@ pathspec==0.12.1
     # via black
 platformdirs==4.2.0
     # via black
+    # via bluecompany
+pyyaml==6.0.1
+    # via bluecompany
