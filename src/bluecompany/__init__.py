@@ -18,7 +18,7 @@ def main() -> int:
     if args.subcommand == "config":
         return config.handle_config_subcommand(args)
     elif args.subcommand == "process":
-        base_dir = config.load_base_directory()
+        base_dir = config.load_config("base_dir")
         if not base_dir:
             print(
                 "Base directory not configured. Please run 'bluecompany config dir /path/to/base/dir' first."
