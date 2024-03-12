@@ -1,3 +1,5 @@
+import sys
+
 import mistletoe
 
 from . import custom_link
@@ -24,7 +26,8 @@ def add_process_subparser(subparsers):
 def process_files(file_paths):
     results = []
     for file_path in file_paths:
-        print(f"Processing {file_path}")
+
+        print(f"Processing {file_path}", file=sys.stderr)
         try:
             with open(file_path, "r") as fin:
                 with custom_link.CustomLinkRenderer() as renderer:

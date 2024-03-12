@@ -1,6 +1,6 @@
 import pathlib
 
-import platformdirs
+import platformdirs, sys
 import yaml
 
 
@@ -35,7 +35,7 @@ def handle_config_subcommand(args):
 def load_base_directory():
     config_dir = platformdirs.user_data_dir("bluecompany", "Acme")
     config_path = pathlib.Path(config_dir) / "config.yaml"
-    print(f"config_path: {config_path}")
+    print(f"config_path: {config_path}", file=sys.stderr)
     if config_path.exists():
         with open(config_path, "r") as f:
             config = yaml.safe_load(f)
